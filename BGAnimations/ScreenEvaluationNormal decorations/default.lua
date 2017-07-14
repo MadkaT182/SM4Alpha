@@ -60,15 +60,13 @@ if ShowStandardDecoration("ItsARecord") then
 					local hsl = PROFILEMAN:GetMachineProfile():GetHighScoreList(pSongOrCourse,pSteps);
 
 					local hs = hsl:GetHighScores()[1]
-					--TODO fix this:
-					--local hsName = hs:GetName();
-					local hsName = "";
-					--TODO Fix this:
-					--local hsPerc = FormatPercentScore( hs:GetPercentDP() );
-					local hsPerc = "";
+					if hs then
+						local hsName = hs:GetName();
+						local hsPerc = FormatPercentScore( hs:GetPercentDP() );
+					end
 					self:GetChild("Record"):visible( false );
 					self:GetChild("NoRecord"):visible( true );
-					if hsl then
+					if hsl and hsName and hsPerc then
 						self:GetChild("NoRecord"):settext(hsName..":\n"..hsPerc);
 					else
 						self:GetChild("NoRecord"):settext("");
