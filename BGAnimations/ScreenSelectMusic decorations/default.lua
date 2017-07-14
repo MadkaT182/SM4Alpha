@@ -20,7 +20,7 @@ end
 
 local t = LoadFallbackB();
 
-t[#t+1] = Def.ActorFrame { 
+t[#t+1] = Def.ActorFrame {
 	InitCommand=cmd(x,SCREEN_CENTER_X+140;y,SCREEN_CENTER_Y-20);
 	OnCommand=cmd(addx,SCREEN_WIDTH*0.6;bounceend,0.5;addx,-SCREEN_WIDTH*0.6);
 	OffCommand=cmd(bouncebegin,0.5;addx,SCREEN_WIDTH*0.6);
@@ -50,7 +50,7 @@ t[#t+1] = LoadFont("Common", "normal") .. {
 	end;
 	SongOptionsChangedMessageCommand=cmd(playcommand,"Set");
 };
-	
+
 t[#t+1] = Def.ActorFrame {
 	InitCommand=cmd(x,SCREEN_CENTER_X-44;y,SCREEN_CENTER_Y-10);
 	LoadActor( "wheel cursor glow" ) .. {
@@ -68,6 +68,7 @@ for pn in ivalues(PlayerNumber) do
 		InitCommand=function(self) self:name(MetricsName); ActorUtil.LoadAllCommandsAndSetXY(self,Var "LoadingScreen"); end;
 		Def.ActorFrame {
 			InitCommand=cmd(x,(-1-(num-1)/2)*spacing_x;y,(-1-(num-1)/2)*spacing_y;);
+			OnCommand=cmd(player,pn);
 			LoadActor( "option icon header" ) .. {
 			};
 			LoadFont("_terminator two 18px" ) .. {
@@ -76,19 +77,17 @@ for pn in ivalues(PlayerNumber) do
 		};
 		Def.ModIconRow {
 			InitCommand=cmd(Load,"ModIconRowSelectMusic",pn;);
-			OnCommand=cmd(zoomy,0;linear,0.5;zoomy,1;);
+			OnCommand=cmd(zoomy,0;linear,0.5;zoomy,1;player,pn);
 			OffCommand=cmd(linear,0.5;zoomy,0;);
 		};
 	};
 end
-	
+
 t[#t+1] = Def.ActorFrame {
 	InitCommand=cmd(x,SCREEN_CENTER_X-120;y,SCREEN_CENTER_Y-170);
 	OnCommand=cmd(addx,-SCREEN_WIDTH*0.6;bounceend,0.5;addx,SCREEN_WIDTH*0.6);
 	OffCommand=cmd(bouncebegin,0.5;addx,-SCREEN_WIDTH*0.6);
-	LoadActor( THEME:GetPathG("MusicSortDisplay","frame") ) .. {
-	
-	};
+	LoadActor( THEME:GetPathG("MusicSortDisplay","frame") ) .. {};
 	LoadFont( "_sf square head 13px" ) .. {
 		InitCommand=cmd(maxwidth,300;playcommand,"Set";x,10;shadowlength,0;diffuse,color("#fbfb57");strokecolor,color("#696800"););
 		SetCommand = function(self)
@@ -144,11 +143,10 @@ t[#t+1] = LoadActor( "temp bpm meter" ) .. {
 	OffCommand=cmd(bouncebegin,0.5;addx,SCREEN_WIDTH*0.6);
 };
 
-t[#t+1] = Def.ActorFrame {	
+t[#t+1] = Def.ActorFrame {
 	InitCommand=cmd(x,SCREEN_CENTER_X;y,SCREEN_CENTER_Y);
 	OnCommand=cmd(addx,SCREEN_WIDTH*0.6;bounceend,0.5;addx,-SCREEN_WIDTH*0.6);
 	OffCommand=cmd(bouncebegin,0.5;addx,SCREEN_WIDTH*0.6);
-	
 	BeginCommand=cmd(visible,false);
 
 	LoadActor( "bpm meter" ) .. {
@@ -178,8 +176,7 @@ t[#t+1] = Def.ActorFrame {
 		InitCommand=cmd(setstate,1;pause;glowshift;effectcolor1,color("1,1,1,0");effectcolor2,color("1,1,1,.1");effectclock,"bgm");
 		BeginCommand=cmd(ztest,1);
 	};
-	
-	
+
 };
 t[#t+1] = LoadActor( "stop icon" ) .. {
 	InitCommand=cmd(x,SCREEN_CENTER_X+296;y,SCREEN_CENTER_Y-4);
@@ -196,7 +193,7 @@ t[#t+1] = LoadActor( "stop icon" ) .. {
 	CurrentSongChangedMessageCommand=cmd(playcommand,"Set");
 	CurrentCourseChangedMessageCommand=cmd(playcommand,"Set");
 };
-	
+
 t[#t+1] = LoadFont("_venacti Bold 15px") .. {
 	InitCommand=cmd(horizalign,left;x,SCREEN_CENTER_X-14;y,SCREEN_CENTER_Y-24;settext,"xxxx";shadowlengthx,0;shadowlengthy,2;shadowcolor,color("#000000");maxwidth,180);
 	SetCommand=function(self)
@@ -248,6 +245,7 @@ t[#t+1] = LoadFont("_venacti Bold 15px") .. {
 	CurrentCourseChangedMessageCommand=cmd(playcommand,"Set");
 };
 
+--Stars
 t[#t+1] = Def.ActorFrame {
 	InitCommand=cmd(x,SCREEN_CENTER_X+26;y,SCREEN_CENTER_Y-5;);
 	LoadActor("star full") .. { InitCommand=cmd(x,16*-2); };
@@ -290,11 +288,10 @@ t[#t+1] = Def.CourseContentsList {
 	CurrentTrailP1ChangedMessageCommand=cmd(playcommand,"Set");
 	CurrentTrailP2ChangedMessageCommand=cmd(playcommand,"Set");
 
-	Display = Def.ActorFrame { 
+	Display = Def.ActorFrame {
 		InitCommand=cmd(setsize,270,34);
 
 		LoadActor("_CourseEntryDisplay bar");
-
 		Def.TextBanner {
 			InitCommand=cmd(Load,"TextBanner";SetFromString,"", "", "", "", "", "");
 			SetSongCommand=function(self, params)
@@ -337,19 +334,11 @@ t[#t+1] = Def.CourseContentsList {
 	};
 };
 
-for pn in ivalues(PlayerNumber) do
-	local MetricsName = "StepsDisplay" .. PlayerNumberToString(pn);
-	t[#t+1] = StepsDisplay(pn) .. {
-		InitCommand=function(self) self:player(pn); self:name(MetricsName); ActorUtil.LoadAllCommandsAndSetXY(self,Var "LoadingScreen"); end;
-	};
-end
-
-
 t[#t+1] = Def.ActorFrame{
 	InitCommand=cmd(x,SCREEN_CENTER_X-190;y,SCREEN_CENTER_Y-32;diffusealpha,0);
 	ShowCommand=cmd(stoptweening;linear,0.2;diffusealpha,1);
 	HideCommand=cmd(stoptweening;linear,0.2;diffusealpha,0);
-	
+
 	LoadActor("long balloon");
 	LoadFont("_terminator two 30px")..{
 		Name="SongLength";
@@ -386,7 +375,7 @@ t[#t+1] = Def.ActorFrame{
 			end
 		end;
 	};
-	
+
 	SetCommand=function(self)
 		local Song = GAMESTATE:GetCurrentSong();
 		self:playcommandonchildren( (Song and (Song:IsLong() or Song:IsMarathon())) and "Show" or "Hide" );
@@ -400,7 +389,7 @@ if not GAMESTATE:IsCourseMode() then
 		InitCommand=cmd(x,SCREEN_CENTER_X+166;y,SCREEN_CENTER_Y+20);
 		CursorP1 = Def.ActorFrame {
 			BeginCommand=cmd(visible,true);
-			StepsSelectedMessageCommand=function( self, param ) 
+			StepsSelectedMessageCommand=function( self, param )
 				if param.Player ~= "PlayerNumber_P1" then return end;
 				self:visible(false);
 			end;
